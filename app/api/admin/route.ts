@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { customerSchema, customers } from "@/db/schema/customer";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 
-export async function GET(req: Request, { params }: { params: string }) {
+export async function GET(req: NextRequest, { params }: { params: string }) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
@@ -21,7 +21,7 @@ export async function GET(req: Request, { params }: { params: string }) {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const parsed = customerSchema.parse(body);
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -63,7 +63,7 @@ export async function DELETE(
   }
 }
 
-export async function PUT(req: Request, { params }: { params: string }) {
+export async function PUT(req: NextRequest, { params }: { params: string }) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
