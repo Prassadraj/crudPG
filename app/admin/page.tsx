@@ -1,0 +1,207 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+function page() {
+  type Customer = {
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    isDeleted: Number;
+  };
+  const [data, setData] = useState<Customer[]>([]);
+  const [popUp, setPopUp] = useState("");
+  const [filterData, setFilteredData] = useState([]);
+  const [customerId, setCustomerId] = useState("");
+  const [editCustomer, setEditCustomer] = useState<Customer | null>({
+    id: "",
+    name: "",
+    email: "",
+    password: "",
+    isDeleted: 0,
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("/api/admin");
+
+        setData(res.data.data);
+      } catch (error) {
+        alert("");
+      }
+    };
+    fetchData();
+  }, [popUp]);
+
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(`/api/admin?id=${customerId}`);
+    } catch (error) {
+      alert(error);
+    }
+    setPopUp("");
+  };
+
+  //   handleEdit
+  const handleEdit = async () => {
+    try {
+      await axios.put(`/admin?id=${customerId}`, editCustomer);
+      setPopUp("");
+    } catch (error) {
+      alert(error);
+    }
+  };
+  return (
+    <div className="h-full w-full flex flex-col justify-start items-center pt-10 gap-2 md:gap-6">
+      <div className="md:text-3xl ">Welcome Admin,</div>
+      <div>
+        <table className="min-w-full border text-xs md:text-base">
+          <thead className="">
+            <tr>
+              <th className="border px-2 py-1 md:px-4 md:py-2 ">No.</th>
+              <th className="border px-2 py-1 md:px-4 md:py-2">Name</th>
+              <th className="border px-2 py-1 md:px-4 md:py-2">Email</th>
+              <th className="border px-2 py-1 md:px-4 md:py-2">Status</th>
+              <th className="border px-2 py-1 md:px-4 md:py-2">Modify</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((customer, i) => (
+              <tr
+                key={customer.id}
+                className={customer.isDeleted ? "bg-red-700" : ""}
+              >
+                <td className="border px-2 py-1 md:px-4 md:py-2">{i + 1}</td>
+                <td className="border px-2 py-1 md:px-4 md:py-2">
+                  {customer.name}
+                </td>
+                <td className="border px-2 py-1 md:px-4 md:py-2">
+                  {customer.email}
+                </td>
+                <td className="border px-2 py-1 md:px-4 md:py-2">
+                  {customer.isDeleted === 0 ? "Active" : "Deleted"}
+                </td>
+                <td className="border px-2 py-1 md:px-4 md:py-2 flex gap-2">
+                  <p
+                    className="cursor-pointer hover:scale-90 transition-all ease-in-out duration-500"
+                    onClick={() => {
+                      setPopUp("edit");
+                      setCustomerId(customer.id);
+                    }}
+                  >
+                    Edit
+                  </p>
+                  <p
+                    className="cursor-pointer hover:scale-90 transition-all ease-in-out duration-500"
+                    onClick={() => {
+                      setPopUp("delete");
+                      setCustomerId(customer.id);
+                    }}
+                  >
+                    Delete
+                  </p>
+                  <p
+                    className="cursor-pointer hover:scale-90 transition-all ease-in-out duration-500"
+                    onClick={() => {
+                      setPopUp("info");
+                      setCustomerId(customer.id);
+                    }}
+                  >
+                    Info
+                  </p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {/* delete */}
+        {popUp == "delete" && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-gray-800 p-6 rounded shadow-md w-80">
+              <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
+              <p className="mb-4">
+                Are you sure you want to delete <b></b>?
+              </p>
+              <div className="flex justify-end gap-2">
+                <button
+                  className="px-4 py-2 rounded border"
+                  onClick={() => setPopUp("")}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-2 rounded bg-red-500 text-white"
+                  onClick={confirmDelete}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* edit  */}
+        {popUp == "edit" && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-gray-800 p-6 rounded shadow-md w-80 flex gap-2 flex-col">
+              <h1 className="text-center">Edit Info</h1>
+              <label htmlFor="">Name</label>
+              <input
+                type="text"
+                onChange={(e) =>
+                  editCustomer &&
+                  setEditCustomer({ ...editCustomer, name: e.target.value })
+                }
+                className="bg-white text-black p-2"
+              />
+              <label htmlFor="">Email</label>
+              <input
+                type="text"
+                value={editCustomer?.email}
+                onChange={(e) =>
+                  editCustomer &&
+                  setEditCustomer({ ...editCustomer, email: e.target.value })
+                }
+                className="bg-white text-black p-2"
+              />
+              <label htmlFor="">Password</label>
+              <input
+                type="text"
+                value={editCustomer?.password}
+                onChange={(e) =>
+                  editCustomer &&
+                  setEditCustomer({ ...editCustomer, password: e.target.value })
+                }
+                className="bg-white text-black p-2"
+              />
+              <div className="flex gap-2 items-center">
+                <label htmlFor="">Active</label>
+                <input
+                  type="checkbox"
+                  id="active"
+                  onClick={() =>
+                    editCustomer &&
+                    setEditCustomer({
+                      ...editCustomer,
+                      isDeleted: editCustomer.isDeleted == 0 ? 1 : 0,
+                    })
+                  }
+                  checked={editCustomer?.isDeleted === 1} // checked if Active
+                  name=""
+                  className="w-4 h-4"
+                />
+              </div>
+              <div
+                className="text-center bg-green-500 p-2 text-black cursor-pointer"
+                onClick={handleEdit}
+              >
+                Done
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default page;
