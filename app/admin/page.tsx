@@ -7,11 +7,11 @@ function page() {
     name: string;
     email: string;
     password: string;
-    isDeleted: Number;
+    isDeleted: number;
   };
   const [data, setData] = useState<Customer[]>([]);
   const [popUp, setPopUp] = useState("");
-  const [filterData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState<Customer | null>(null);
   const [customerId, setCustomerId] = useState("");
   const [editCustomer, setEditCustomer] = useState<Customer | null>({
     id: "",
@@ -31,26 +31,45 @@ function page() {
       }
     };
     fetchData();
-  }, [popUp]);
+  }, []);
 
   const confirmDelete = async () => {
     try {
       await axios.delete(`/api/admin?id=${customerId}`);
-    } catch (error) {
-      alert(error);
-    }
-    setPopUp("");
-  };
-
-  //   handleEdit
-  const handleEdit = async () => {
-    try {
-      await axios.put(`/admin?id=${customerId}`, editCustomer);
+      setData((prev) =>
+        prev.map((val) =>
+          val.id == customerId ? { ...val, isDeleted: 1 } : val
+        )
+      );
       setPopUp("");
     } catch (error) {
       alert(error);
     }
   };
+  // for update
+
+  //   handleEdit
+  const handleEdit = async () => {
+    if (!filteredData) {
+      return;
+    }
+    try {
+      await axios.put(`/api/admin?id=${customerId}`, filteredData);
+      setData((prev) =>
+        prev.map((val) => (val.id == filteredData.id ? filteredData : val))
+      );
+
+      setPopUp("");
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  // get the customer data
+  useEffect(() => {
+    const filtered = data.filter((val) => val.id == customerId);
+    setFilteredData(filtered[0] || null);
+  }, [customerId]);
   return (
     <div className="h-full w-full flex flex-col justify-start items-center pt-10 gap-2 md:gap-6">
       <div className="md:text-3xl ">Welcome Admin,</div>
@@ -92,7 +111,11 @@ function page() {
                     Edit
                   </p>
                   <p
-                    className="cursor-pointer hover:scale-90 transition-all ease-in-out duration-500"
+                    className={`${
+                      customer.isDeleted === 1
+                        ? "opacity-60 pointer-events-none"
+                        : "cursor-pointer"
+                    } hover:scale-90 transition-all ease-in-out duration-500`}
                     onClick={() => {
                       setPopUp("delete");
                       setCustomerId(customer.id);
@@ -125,7 +148,9 @@ function page() {
               <div className="flex justify-end gap-2">
                 <button
                   className="px-4 py-2 rounded border"
-                  onClick={() => setPopUp("")}
+                  onClick={() => {
+                    setPopUp("");
+                  }}
                 >
                   Cancel
                 </button>
@@ -146,47 +171,53 @@ function page() {
               <h1 className="text-center">Edit Info</h1>
               <label htmlFor="">Name</label>
               <input
+                value={filteredData?.name || ""}
                 type="text"
                 onChange={(e) =>
-                  editCustomer &&
-                  setEditCustomer({ ...editCustomer, name: e.target.value })
+                  setFilteredData((prev) =>
+                    prev ? { ...prev, name: e.target.value } : null
+                  )
                 }
                 className="bg-white text-black p-2"
               />
               <label htmlFor="">Email</label>
               <input
                 type="text"
-                value={editCustomer?.email}
+                value={filteredData?.email}
                 onChange={(e) =>
-                  editCustomer &&
-                  setEditCustomer({ ...editCustomer, email: e.target.value })
+                  setFilteredData((prev) =>
+                    prev ? { ...prev, email: e.target.value } : null
+                  )
                 }
                 className="bg-white text-black p-2"
               />
               <label htmlFor="">Password</label>
               <input
                 type="text"
-                value={editCustomer?.password}
+                value={filteredData?.password}
                 onChange={(e) =>
-                  editCustomer &&
-                  setEditCustomer({ ...editCustomer, password: e.target.value })
+                  setFilteredData((prev) =>
+                    prev ? { ...prev, password: e.target.value } : null
+                  )
                 }
                 className="bg-white text-black p-2"
               />
               <div className="flex gap-2 items-center">
-                <label htmlFor="">Active</label>
+                <label htmlFor="" id="check">
+                  Active
+                </label>
                 <input
                   type="checkbox"
                   id="active"
-                  onClick={() =>
-                    editCustomer &&
-                    setEditCustomer({
-                      ...editCustomer,
-                      isDeleted: editCustomer.isDeleted == 0 ? 1 : 0,
-                    })
+                  onChange={() =>
+                    setFilteredData((prev) =>
+                      prev
+                        ? { ...prev, isDeleted: prev.isDeleted === 0 ? 1 : 0 }
+                        : null
+                    )
                   }
-                  checked={editCustomer?.isDeleted === 1} // checked if Active
-                  name=""
+                  checked={filteredData?.isDeleted === 0} // checked if Active
+                  name="check"
                   className="w-4 h-4"
                 />
               </div>
