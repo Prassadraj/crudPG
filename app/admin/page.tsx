@@ -69,6 +69,13 @@ function page() {
       await axios.post("/api/admin", createCustomer);
       const res = await axios.get("/api/admin");
       setData(res.data.data);
+      setCreateCustomer({
+        id: "",
+        name: "",
+        password: "",
+        email: "",
+        isDeleted: 0,
+      });
       setPopUp("");
     } catch (error) {
       alert(error);
