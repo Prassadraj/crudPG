@@ -206,7 +206,7 @@ function page() {
               <label htmlFor="">Email</label>
               <input
                 type="text"
-                value={filteredData?.email||""}
+                value={filteredData?.email || ""}
                 onChange={(e) =>
                   setFilteredData((prev) =>
                     prev ? { ...prev, email: e.target.value } : null
@@ -217,7 +217,7 @@ function page() {
               <label htmlFor="">Password</label>
               <input
                 type="text"
-                value={filteredData?.password||""}
+                value={filteredData?.password || ""}
                 onChange={(e) =>
                   setFilteredData((prev) =>
                     prev ? { ...prev, password: e.target.value } : null
@@ -315,6 +315,32 @@ function page() {
                 onClick={handleCreate}
               >
                 Create
+              </div>
+            </div>
+          </div>
+        )}
+        {/* info  */}
+        {popUp == "info" && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-gray-800 p-6  rounded shadow-md w-80 flex gap-2 flex-col">
+              <div>
+                <label htmlFor="">Name</label>
+                <p>{filteredData?.name}</p>
+              </div>
+              <div>
+                <label htmlFor="">Email</label>
+                <p>{filteredData?.email}</p>
+              </div>
+              <div>
+                <label htmlFor="">Password</label>
+                <p>{filteredData?.password}</p>
+              </div>
+
+              <div
+                onClick={() => setPopUp("")}
+                className="w-full text-center bg-red-400"
+              >
+                Back
               </div>
             </div>
           </div>
