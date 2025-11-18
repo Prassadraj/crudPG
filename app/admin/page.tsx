@@ -250,6 +250,12 @@ function page() {
               >
                 Done
               </div>
+              <div
+                className="text-center bg-red-500 p-2 text-white cursor-pointer"
+                onClick={() => setPopUp("")}
+              >
+                Cancel
+              </div>
             </div>
           </div>
         )}
@@ -315,6 +321,12 @@ function page() {
                 onClick={handleCreate}
               >
                 Create
+              </div>
+              <div
+                className="text-center bg-red-500 p-2 text-white cursor-pointer"
+                onClick={() => setPopUp("")}
+              >
+                Cancel
               </div>
             </div>
           </div>
