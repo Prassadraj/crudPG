@@ -86,7 +86,7 @@ function page() {
   useEffect(() => {
     const filtered = data.filter((val) => val.id == customerId);
     setFilteredData(filtered[0] || null);
-  }, [customerId]);
+  }, [customerId, data]);
   return (
     <div className="h-full w-full flex flex-col justify-start items-center pt-10 gap-2 md:gap-6">
       <div className="md:text-3xl ">Welcome Admin,</div>
@@ -206,7 +206,7 @@ function page() {
               <label htmlFor="">Email</label>
               <input
                 type="text"
-                value={filteredData?.email}
+                value={filteredData?.email||""}
                 onChange={(e) =>
                   setFilteredData((prev) =>
                     prev ? { ...prev, email: e.target.value } : null
@@ -217,7 +217,7 @@ function page() {
               <label htmlFor="">Password</label>
               <input
                 type="text"
-                value={filteredData?.password}
+                value={filteredData?.password||""}
                 onChange={(e) =>
                   setFilteredData((prev) =>
                     prev ? { ...prev, password: e.target.value } : null

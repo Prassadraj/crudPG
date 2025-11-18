@@ -1,0 +1,1 @@
+ALTER TABLE "customers" ADD COLUMN "is_created_by" timestamp DEFAULT now();
