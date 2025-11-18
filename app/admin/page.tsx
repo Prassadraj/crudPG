@@ -8,6 +8,7 @@ function page() {
     email: string;
     password: string;
     isDeleted: number;
+    iscreatedBy: string;
   };
   const [data, setData] = useState<Customer[]>([]);
   const [popUp, setPopUp] = useState("");
@@ -19,6 +20,7 @@ function page() {
     email: "",
     password: "",
     isDeleted: 0,
+    iscreatedBy: "",
   });
   useEffect(() => {
     const fetchData = async () => {
@@ -64,6 +66,7 @@ function page() {
       alert(error);
     }
   };
+  // console.log(data);
   const handleCreate = async () => {
     try {
       await axios.post("/api/admin", createCustomer);
@@ -75,6 +78,7 @@ function page() {
         password: "",
         email: "",
         isDeleted: 0,
+        iscreatedBy: "",
       });
       setPopUp("");
     } catch (error) {
@@ -336,16 +340,28 @@ function page() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-gray-800 p-6  rounded shadow-md w-80 flex gap-2 flex-col">
               <div>
-                <label htmlFor="" className="font-bold">Name</label>
+                <label htmlFor="" className="font-bold">
+                  Name
+                </label>
                 <p>{filteredData?.name}</p>
               </div>
               <div>
-                <label htmlFor="" className="font-bold">Email</label>
+                <label htmlFor="" className="font-bold">
+                  Email
+                </label>
                 <p>{filteredData?.email}</p>
               </div>
               <div>
-                <label htmlFor="" className="font-bold">Password</label>
+                <label htmlFor="" className="font-bold">
+                  Password
+                </label>
                 <p>{filteredData?.password}</p>
+              </div>
+              <div>
+                <label htmlFor="" className="font-bold">
+                  Created at
+                </label>
+                <p>{filteredData?.iscreatedBy}</p>
               </div>
 
               <div
