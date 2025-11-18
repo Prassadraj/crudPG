@@ -3,7 +3,7 @@ import { customerSchema, customers } from "@/db/schema/customer";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 
-export async function GET(req: NextRequest, { params }: { params: string }) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
@@ -63,7 +63,7 @@ export async function DELETE(
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: string }) {
+export async function PUT(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
