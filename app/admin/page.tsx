@@ -91,13 +91,13 @@ function page() {
     <div className="h-full w-full flex flex-col justify-start items-center pt-10 gap-2 md:gap-6">
       <div className="md:text-3xl ">Welcome Admin,</div>
       <div
-        className="fixed z-20 top-20 right-20 cursor-pointer"
+        className="fixed z-20 top-4 right-3 text-[9px] px-2 md:text-lg md:top-20 md:right-20 cursor-pointer"
         onClick={() => setPopUp("create")}
       >
         Create Customer
       </div>
       <div>
-        <table className="min-w-full border text-xs md:text-base">
+        <table className="min-w-full border text-[9px] md:text-base">
           <thead className="">
             <tr>
               <th className="border px-2 py-1 md:px-4 md:py-2 ">No.</th>
