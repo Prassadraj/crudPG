@@ -336,15 +336,15 @@ function page() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-gray-800 p-6  rounded shadow-md w-80 flex gap-2 flex-col">
               <div>
-                <label htmlFor="">Name</label>
+                <label htmlFor="" className="font-bold">Name</label>
                 <p>{filteredData?.name}</p>
               </div>
               <div>
-                <label htmlFor="">Email</label>
+                <label htmlFor="" className="font-bold">Email</label>
                 <p>{filteredData?.email}</p>
               </div>
               <div>
-                <label htmlFor="">Password</label>
+                <label htmlFor="" className="font-bold">Password</label>
                 <p>{filteredData?.password}</p>
               </div>
 
