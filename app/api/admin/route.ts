@@ -37,9 +37,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
