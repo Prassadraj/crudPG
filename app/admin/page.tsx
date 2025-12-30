@@ -22,7 +22,7 @@ function page() {
     id: "",
     name: "",
     email: "",
-    
+
     password: "",
     isDeleted: 0,
     iscreatedBy: "",
@@ -39,6 +39,7 @@ function page() {
     };
     fetchData();
   }, []);
+  
   // const filteredInfo = useMemo(() => {
   //   return data.filter((val) => val.isDeleted == 0);
   // }, []);
