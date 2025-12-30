@@ -22,6 +22,7 @@ function page() {
     id: "",
     name: "",
     email: "",
+    
     password: "",
     isDeleted: 0,
     iscreatedBy: "",
